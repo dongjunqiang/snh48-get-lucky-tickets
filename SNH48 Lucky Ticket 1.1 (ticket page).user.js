@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SNH48 Lucky Ticket 1.1 (ticket page)
 // @namespace    https://github.com/TangHHH/snh48-get-lucky-tickets
-// @version      1.1.2
+// @version      1.1.3
 // @description  SNH48新官方商城捡漏脚本（票务页面刷票）
 // @author       TangHHH
 // @match        https://shop.48.cn/tickets/item/*
@@ -139,8 +139,9 @@
             },
             error: function (e) {
                 $('.callTime').html(dateToTime(new Date()));
-                $('.message').html("您排队失败，请刷新重试");
+                $('.message').html("fail");
                 $('.errorCode').html("162001");
+                setTimeout(function(){loopTickets();},looptime);
             }
         });
     }
