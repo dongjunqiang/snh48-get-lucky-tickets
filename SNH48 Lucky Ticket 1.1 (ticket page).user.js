@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SNH48 Lucky Ticket 1.1 (ticket page)
 // @namespace    https://github.com/TangHHH/snh48-get-lucky-tickets
-// @version      1.1.3
+// @version      1.1.4
 // @description  SNH48新官方商城捡漏脚本（票务页面刷票）
 // @author       TangHHH
 // @match        https://shop.48.cn/tickets/item/*
@@ -135,7 +135,7 @@
                         window.location.href = result.ReturnObject;
                     }
                 else
-                    setTimeout(function(){checkTicket(ticketId,num,seatType,brandId);},2000);
+                    setTimeout(function(){checkTicket(ticketId,num,seatType,brandId,0);},2000);
             },
             error: function (e) {
                 $('.callTime').html(dateToTime(new Date()));
@@ -146,7 +146,7 @@
         });
     }
 
-    function checkTicket(ticketId,num,seatType,brandId){
+    function checkTicket(ticketId,num,seatType,brandId,times){
         $.ajax({
             url: "/TOrder/tickCheck",
             type: "GET",
@@ -164,7 +164,10 @@
                 else
                     switch(result.ErrorCode){
                         case "wait":
-                            setTimeout(function(){checkTicket(ticketId,num,seatType,brandId);},5000);
+                            if(times<2)
+                                setTimeout(function(){checkTicket(ticketId,num,seatType,brandId,++times);},5000);
+                            else
+                                setTimeout(function(){loopTickets();},looptime);
                             break;
                         case "success":
                             $('.errorCode').after('&emsp; 订单号：<span style="color:#E53333;">' + result.ReturnObject + '</span>');
